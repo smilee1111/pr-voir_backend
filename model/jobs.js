@@ -1,5 +1,5 @@
 const {Datatypes}=require('sequelize');
-const sequelize = require('../self_planner_website_backend/database/db');
+const sequelize = require('../database/db');
 
 const jobs = sequelize.define('jobs',{
     job_id:{
