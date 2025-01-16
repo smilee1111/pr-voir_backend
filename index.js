@@ -1,8 +1,8 @@
 const express = require("express");
 const cors= require("cors");
 const bodyParser = require("body-parser");
-const router = express.Router();
-const testRoutes=require('./routes/testRoutes')
+const sequelize=require('./database/db')
+const userRoute=require('./')
 
 //creating a server
 const app=express();
@@ -15,23 +15,18 @@ const PORT=5000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-const sequelize =require('./database/db')
 
-//creating a route
+
+//creating a routeS
 app.get('/',(req, res)=>{
     res.send("This is web page")
 })
-
-
-//using the router
-app.use('/test',testRoutes);
-
 app.get('/ourpartners',(req, res)=>{
     res.send(`Your Partners ${req.params.id}`)
 })
 
 
-//running on port   
+//running on port
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
 });

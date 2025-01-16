@@ -1,12 +1,12 @@
 //Impoerting the model 
-const Test = require('../model/Test')
+const User = require('../model/user')
 
 
 //Create functions to get all Test Users
-const getTest = async(req,res)=>{
+const getUser = async(req,res)=>{
     try{
-        const tests = await Test.findAll()
-        res.status(200).json(tests);
+        const users = await User.findAll()
+        res.status(200).json(users);
         console.log('Retreive all test users');
 
     }
@@ -17,15 +17,15 @@ const getTest = async(req,res)=>{
 }
 
 //create functions to create Test users
-const createTest =async(req,res)=>{
+const createUser =async(req,res)=>{
     try{
         const{username,password} =req.body;
-        const newtest = await Test.create({username,password});
-        res.status(200).json(newtest);
+        const newuser = await Test.create({username,password});
+        res.status(200).json(newuser);
         console.log('New Test user Created')
     }
     catch(error){
-        res.status(500).json({error:'failed to create test user '});
+        res.status(500).json({error:'failed to create user '});
     }
 }
-module.exports={getTest,createTest}
+module.exports={getUser,createUser}
