@@ -2,16 +2,16 @@ const express = require("express");
 const cors= require("cors");
 const bodyParser = require("body-parser");
 const sequelize=require('./database/db')
-const userRoute=require('./')
+const userRoute=require('./routes/userRoutes')
 
 //creating a server
 const app=express();
 
 
 //creating a port
-const PORT=5000;
+const PORT=5001;
 
-//creating a middleware
+//creating a middlewares
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));

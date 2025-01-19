@@ -19,6 +19,7 @@ const getUser = async(req,res)=>{
 //create functions to create Test users
 const createUser =async(req,res)=>{
     try{
+        
         const{username,password} =req.body;
         const newuser = await Test.create({username,password});
         res.status(200).json(newuser);
