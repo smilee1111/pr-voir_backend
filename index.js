@@ -25,6 +25,7 @@ app.get('/ourpartners',(req, res)=>{
     res.send(`Your Partners ${req.params.id}`)
 })
 
+app.use('/user',userRoute)
 
 //running on port
 app.listen(PORT,()=>{
