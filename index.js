@@ -1,33 +1,12 @@
 const express = require("express");
-const cors= require("cors");
-const bodyParser = require("body-parser");
-const sequelize=require('./database/db')
-const userRoute=require('./routes/userRoutes')
+const cors = require("cors");
+const userRoutes = require("./routes/userRoutes");  // Ensure correct path
 
-//creating a server
-const app=express();
+const app = express();
+app.use(express.json());
+app.use(cors()); // Enable CORS for frontend requests
 
+app.use("/api/users", userRoutes); // This ensures your frontend request matches the route
 
-//creating a port
-const PORT=5001;
-
-//creating a middlewares
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
-
-
-//creating a routeS
-app.get('/',(req, res)=>{
-    res.send("This is web page")
-})
-app.get('/ourpartners',(req, res)=>{
-    res.send(`Your Partners ${req.params.id}`)
-})
-
-app.use('/user',userRoute)
-
-//running on port
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`);
-});
+const PORT = 5001;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
