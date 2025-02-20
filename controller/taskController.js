@@ -69,7 +69,9 @@ const createTaskController = async (req, res) => {
    */
   const updateTaskController = async (req, res) => {
     try {
+      
       const taskId = parseInt(req.params.id, 10);
+      console.log("Updating Task with ID:", taskId); // Log task ID to verify it's being passed correctly
       if (isNaN(taskId)) {
         return res.status(400).json({ message: "Invalid task ID" });
       }
