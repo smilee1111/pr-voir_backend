@@ -1,14 +1,33 @@
 const express = require("express");
 const cors = require("cors");
-const userRoutes = require("./routes/userRoutes");  // Ensure correct path
-const taskRoutes = require("./routes/taskRoutes");
-const eventRoutes = require("./routes/eventRoutes");
-const app = express();
-app.use(express.json());
-app.use(cors()); // Enable CORS for frontend requests
+const bodyParser = require("body-parser");
+const path = require("path");  
 
-app.use("/api/users", userRoutes);
-app.use("/api/tasks", taskRoutes);
-app.use("/api/events", eventRoutes);
-const PORT = 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const userRoute = require("./routes/userRoute");
+const taskRoute = require("./routes/taskRoute");
+const eventRoute = require("./routes/eventRoute");
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve the uploads folder statically
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Define Routes
+app.use("/users", userRoute);
+app.use("/task", taskRoute);
+app.use("/event", eventRoute);
+
+// 404 Not Found Handler
+app.use((req, res) => {
+    res.status(404).json({ error: "Route not found" });
+});
+
+// Start Server
+app.listen(PORT, () => {
+    console.log(`Server Running on  ...................... PORT ${PORT}`);
+});
