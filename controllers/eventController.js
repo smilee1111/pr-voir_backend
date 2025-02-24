@@ -4,24 +4,39 @@ async function createEvent(req, res) {
     try {
         const { title, description, location, startdatetime, enddatetime, userId } = req.body;
 
-        // Validate if all fields are present
+        // Validate required fields
         if (!title || !description || !location || !startdatetime || !enddatetime || !userId) {
             return res.status(400).json({ message: "All fields, including userId, are required" });
         }
 
+        // Validate date format
+        if (isNaN(Date.parse(startdatetime)) || isNaN(Date.parse(enddatetime))) {
+            return res.status(400).json({ message: "Invalid date format" });
+        }
+
+        // Ensure enddatetime is after startdatetime
+        if (new Date(startdatetime) >= new Date(enddatetime)) {
+            return res.status(400).json({ message: "End date must be after start date" });
+        }
+
+        // Validate userId
+        if (isNaN(userId) || userId <= 0) {
+            return res.status(400).json({ message: "Invalid userId" });
+        }
+
         // Create new event
-        const newEvent = await Event.create({ 
-            title, 
-            description, 
-            location, 
-            startdatetime, 
+        const newEvent = await Event.create({
+            title,
+            description,
+            location,
+            startdatetime,
             enddatetime,
-            userId 
+            userId,
         });
 
         res.status(201).json(newEvent);
     } catch (error) {
-        console.error(error);
+        console.error("Error in createEvent:", error.message);
         res.status(500).json({ error: "Failed to create event" });
     }
 }
