@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const Event = require("../model/event");
 
 async function createEvent(req, res) {
@@ -50,6 +51,34 @@ async function getAllEvents(req, res) {
     }
 }
 
+// New function to get events for a specific date
+async function getEventsForDate(req, res) {
+    try {
+        const { date } = req.query; // Expecting 'YYYY-MM-DD' format from frontend
+        const selectedDate = new Date(date); // Convert to Date object
+
+        // Validate date format
+        if (isNaN(selectedDate)) {
+            return res.status(400).json({ message: "Invalid date format" });
+        }
+
+        // Fetch events for the selected date (matching year, month, and day)
+        const events = await Event.findAll({
+            where: {
+                startdatetime: {
+                    [Op.gte]: new Date(selectedDate.setHours(0, 0, 0, 0)), // Start of the selected day
+                    [Op.lt]: new Date(selectedDate.setHours(23, 59, 59, 999)) // End of the selected day
+                }
+            }
+        });
+
+        res.status(200).json(events);
+    } catch (error) {
+        console.error("Error in getEventsForDate:", error.message);
+        res.status(500).json({ error: "Failed to fetch events for the selected date" });
+    }
+}
+
 async function getEventById(req, res) {
     try {
         const event = await Event.findByPk(req.params.id);
@@ -67,13 +96,13 @@ async function updateEvent(req, res) {
         if (!event) return res.status(404).json({ error: "Event not found" });
 
         // Update the event with new details
-        await event.update({ 
-            title, 
-            description, 
-            location, 
-            startdatetime, 
+        await event.update({
+            title,
+            description,
+            location,
+            startdatetime,
             enddatetime,
-            userId 
+            userId
         });
 
         res.status(200).json(event);
@@ -81,8 +110,6 @@ async function updateEvent(req, res) {
         res.status(500).json({ error: "Failed to update event" });
     }
 }
-
-
 
 async function deleteEvent(req, res) {
     try {
@@ -96,11 +123,11 @@ async function deleteEvent(req, res) {
     }
 }
 
-
 module.exports = {
     createEvent,
     getAllEvents,
     getEventById,
     updateEvent,
     deleteEvent,
+    getEventsForDate // New route to get events by date
 };
