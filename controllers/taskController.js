@@ -2,37 +2,38 @@ const Task = require("../model/task");
 
 
 const { Op, Sequelize } = require("sequelize");
-
-// Controller method to get tasks by day
-async function getTasksByDay (req, res){
+async function getTasksByDay(req, res) {
     try {
-      const { dayIndex } = req.params; // Day index (0-6, where Sunday is 0)
-
+      const { dayIndex } = req.params;
+      const { userId } = req.query; // Get userId from query parameters
+  
       // Get today's date and calculate the start of the week (Sunday)
       const today = new Date();
       const startOfWeek = new Date(today);
       startOfWeek.setDate(today.getDate() - today.getDay()); // Set to the start of the week (Sunday)
-
+  
       // Calculate the selected day based on the week (start of the week + day index)
       const selectedDate = new Date(startOfWeek);
       selectedDate.setDate(startOfWeek.getDate() + parseInt(dayIndex)); // Adjust for selected day
-
-      // Fetch tasks created on the selected date (from 00:00 to 23:59)
+  
+      // Fetch tasks for the selected user and date (from 00:00 to 23:59)
       const tasks = await Task.findAll({
         where: {
           createdAt: {
             [Op.gte]: new Date(selectedDate.setHours(0, 0, 0, 0)), // Start of the day (midnight)
             [Op.lt]: new Date(selectedDate.setHours(23, 59, 59, 999)) // End of the day (just before midnight)
-          }
+          },
+          userId: userId // Filter by userId
         }
       });
-
+  
       res.json(tasks); // Send the fetched tasks as a response
     } catch (error) {
       console.error("Error fetching tasks:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  };
+  }
+  
 async function createTask(req, res) {
     try {
         const { title, description, duetime, status, priority, userId } = req.body;
