@@ -9,4 +9,5 @@ router.put("/updateEvent/:id", eventController.updateEvent);
 router.delete("/deleteEvent/:id", eventController.deleteEvent);
 // New route for fetching events on a specific date
 router.get('/getEventsForDate', eventController.getEventsForDate);
+
 module.exports = router;
