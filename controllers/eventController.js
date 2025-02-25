@@ -123,6 +123,7 @@ async function deleteEvent(req, res) {
     }
 }
 
+
 module.exports = {
     createEvent,
     getAllEvents,
@@ -130,4 +131,5 @@ module.exports = {
     updateEvent,
     deleteEvent,
     getEventsForDate // New route to get events by date
+    
 };

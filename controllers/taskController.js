@@ -61,11 +61,22 @@ async function deleteTask(req, res) {
         res.status(500).json({ error: "Failed to delete task" });
     }
 }
+async function getTasksByUser (req, res){
+    try {
+        const { userId } = req.params;
+        const tasks = await Task.findAll({ where: { userId } });
+        res.json(tasks);
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching tasks" });
+    }
+};
+
 
 module.exports = {
     createTask,
     getAllTasks,
     getTaskById,
     updateTask,
-    deleteTask
+    deleteTask,
+    getTasksByUser
 };
