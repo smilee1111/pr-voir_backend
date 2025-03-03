@@ -1,5 +1,5 @@
 const { Sequelize } = require("sequelize");
-
+//database connection
 const sequelize = new Sequelize('personal_planner_db', 'postgres', 'musk@n2020#',{
 
     host: 'localhost',
@@ -8,6 +8,7 @@ const sequelize = new Sequelize('personal_planner_db', 'postgres', 'musk@n2020#'
     logging: false,
 });
 
+//testing connection
 async function testConnection() {
     try{
         await sequelize.authenticate();
