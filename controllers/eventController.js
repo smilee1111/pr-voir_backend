@@ -95,7 +95,6 @@ async function updateEvent(req, res) {
         const event = await Event.findByPk(req.params.id);
         if (!event) return res.status(404).json({ error: "Event not found" });
 
-        // Update the event with new details
         await event.update({
             title,
             description,
