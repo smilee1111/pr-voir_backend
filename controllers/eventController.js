@@ -51,10 +51,10 @@ async function getAllEvents(req, res) {
     }
 }
 
-// New function to get events for a specific date
+
 async function getEventsForDate(req, res) {
     try {
-        const { date } = req.query; // Expecting 'YYYY-MM-DD' format from frontend
+        const { date } = req.query; 
         const selectedDate = new Date(date); // Convert to Date object
 
         // Validate date format
@@ -66,8 +66,8 @@ async function getEventsForDate(req, res) {
         const events = await Event.findAll({
             where: {
                 startdatetime: {
-                    [Op.gte]: new Date(selectedDate.setHours(0, 0, 0, 0)), // Start of the selected day
-                    [Op.lt]: new Date(selectedDate.setHours(23, 59, 59, 999)) // End of the selected day
+                    [Op.gte]: new Date(selectedDate.setHours(0, 0, 0, 0)), 
+                    [Op.lt]: new Date(selectedDate.setHours(23, 59, 59, 999))
                 }
             }
         });

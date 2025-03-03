@@ -1,6 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../database/db");
 const User = require("../model/user");
+//task model detail
+//task table in database looks like 
 const Task = sequelize.define("dailytasks", {
    taskid: {
         type: DataTypes.INTEGER,
