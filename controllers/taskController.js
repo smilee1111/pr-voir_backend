@@ -51,7 +51,7 @@ async function getTasksByDay(req, res) {
 module.exports = {
   getTasksByDay,
 };
-
+//a function to create task
 async function createTask(req, res) {
     try {
         const { title, description, duetime, status, priority, userId } = req.body;
