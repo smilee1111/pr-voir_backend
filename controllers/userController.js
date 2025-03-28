@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 require("dotenv").config();
 
 const registerUser = async (req, res) => {
-    const { username, email, password,phonenumber } = req.body;
+    const { username, email, password, phonenumber } = req.body;
     console.log("📥 Incoming Registration Request:", { username, email, phonenumber });
 
     if (!username || !email || !password || !phonenumber) {
@@ -14,23 +14,18 @@ const registerUser = async (req, res) => {
     try {
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(400).json({ error: "Email already registered" });
+            console.log("❌ Email already registered:", email);
+            return res.status(400).json({ error: "Email already registered. Please log in." });
         }
 
         const hashPassword = await bcrypt.hash(password, 10);
-        const newUser = await User.create({ 
-            username, 
-            email, 
-            password: hashPassword, 
-            phonenumber
-        });
+        const newUser = await User.create({ username, email, password: hashPassword, phonenumber });
 
-       
-        const token = jwt.sign({ 
-            userId: newUser.id,  
-            username: newUser.username, 
-            phonenumber: newUser.phonenumber
-        }, process.env.JWT_SECRET, { expiresIn: "24h" });
+        const token = jwt.sign(
+            { userId: newUser.id, username: newUser.username, phonenumber: newUser.phonenumber },
+            process.env.JWT_SECRET,
+            { expiresIn: "24h" }
+        );
 
         console.log("✅ Registration Successful:", { userId: newUser.id, username: newUser.username });
 
@@ -42,7 +37,7 @@ const registerUser = async (req, res) => {
             phonenumber: newUser.phonenumber
         });
     } catch (error) {
-        console.error("  Registration Error:", error);
+        console.error("❌ Registration Error:", error);
         res.status(500).json({ error: "Something went wrong." });
     }
 };
